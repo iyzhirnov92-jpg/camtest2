@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <title>WebAR Face — Minimal</title>
+  <style>
+    html,body { margin:0; height:100%; background:#000; overflow:hidden; }
+    .hint { position:fixed; left:0; right:0; bottom:10px; color:#fff; font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial; text-align:center; opacity:.92; }
+  </style>
+  <!-- A-Frame -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.0/dist/aframe.min.js"></script>
+  <!-- MindAR (ядро + интеграция с A-Frame) -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.0/dist/mindar-face.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.0/dist/mindar-face-aframe.prod.js"></script>
+</head>
+<body>
+  <div class="hint">Разреши камеру. Держи лицо в кадре — увидишь накладку.</div>
+
+  <a-scene
+    mindar-face="autoStart: true; uiLoading: yes; uiScanning: no; uiError: yes;"
+    embedded color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights: true"
+    xr-mode-ui="enabled: false">
+
+    <!-- ВАЖНО: связка камер для MindAR -->
+    <a-camera active="false"></a-camera>
+    <a-entity mindar-face-camera></a-entity>
+
+    <a-assets>
+      <!-- Положи рядом с index.html файл mask.png (прозрачная PNG). Для теста можно оставить этот data-URL. -->
+      <img id="mask" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/58BAgMCAo8G5wAAAABJRU5ErkJggg==" />
+    </a-assets>
+
+    <!-- Привязка к центру лица (нос). Для проверки рисуем простую зелёную плоскость -->
+    <a-entity mindar-face-target="anchorIndex: 0">
+      <!-- Для наглядности: зелёный квадратик над носом -->
+      <a-plane color="#00ff88" position="0 0.1 0.02" width="0.15" height="0.15" opacity="0.7"></a-plane>
+
+      <!-- Если уже есть mask.png, раскомментируй блок ниже и закомментируй зелёный квадратик -->
+      <!--
+      <a-plane src="#mask"
+               position="0 -0.68 0.02"
+               width="1.18" height="1.18"
+               transparent="true"></a-plane>
+      -->
+    </a-entity>
+  </a-scene>
+</body>
+</html>
